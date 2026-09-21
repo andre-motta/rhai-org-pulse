@@ -961,8 +961,9 @@ module.exports = function registerPackageRequestRoutes(router, context, deps = {
       if (!authEmail) {
         return res.status(401).json({ error: 'Authentication required. No user email available.' });
       }
-      // Rate limiting keys on the authenticated identity; Jira lookups and the
-      // Epic use the requester mapped onto the Jira email domain.
+      // The normalized email is used for everything that follows: rate
+      // limiting, Jira lookups, and the Epic description. Mapping onto the Jira
+      // domain also keeps one person on one cooldown regardless of domain.
       const email = normalizeRequesterEmail(authEmail);
 
       if (req.body !== undefined && req.body !== null &&
@@ -1007,6 +1008,7 @@ module.exports = function registerPackageRequestRoutes(router, context, deps = {
           requester: email,
           summary: buildEpicSummary(request.packageName, request.extras),
           jira: { key: jiraProject + '-DEMO', url: null, project: jiraProject },
+          reporter_set: false,
           pipeline: { triggered: false, reason: 'demo mode' }
         });
       }

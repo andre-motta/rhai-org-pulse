@@ -518,6 +518,7 @@ describe('package-requests', () => {
         requester: 'jane@redhat.com',
         summary: 'vllm[cu12] package update request',
         jira: { key: 'AIPCC-DEMO', url: null, project: 'AIPCC' },
+        reporter_set: false,
         pipeline: { triggered: false, reason: 'demo mode' }
       })
       // Rate limited on the immediate second submission (still no external calls).
